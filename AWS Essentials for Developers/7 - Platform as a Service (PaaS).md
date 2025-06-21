@@ -43,11 +43,28 @@ AWS **Elastic Beanstalk** is an easy-to-use service for deploying and scaling we
    ```
 Tip: Use environment variables in Beanstalk to manage secrets or configurations for your app.
 
+**Lightsail**
+
+If you used to host an existing wordpress or other static sites in a hosting app, this is a good candidate to use as a replacement. It has a built in way to scale up and even move to use your own EC2 instances as well.
+
+
 ### **2.2 Running Containers on AWS**
+
+**Elastic Container Service (ECS)**
+
+Container orchestration tool, first create a cluster and in there you create nodes such as EC2 instances, these will run the individual containers. We can load balance between the containers running in the different zones, running in different availability zones. This will allow app to scale and add redundancy for failing.
+
+If you need an always up and running instance, you should choose EC2 instances. This is useful for example to contain an API service written in nodeJS.
 
 **AWS Fargate (Serverless Container Service)**
 
 AWS Fargate is a serverless compute engine for containers, eliminating the need to manage servers. It integrates with Amazon ECS (Elastic Container Service) or Amazon EKS (Elastic Kubernetes Service).
+
+Fargate is mainly used if you have a container that executing a single task and when it is done it stops executing. For example, it can be used to process images uploaded into an S3 bucket, like resizing them, etc. You'll only get billed by the time the container was running.
+
+**Elastic Container Registry:**
+
+ECR is the registry where we can store images which AWS will use to spawn new instances as needed. The images should contain all the source code and OS layer and any packages that are needed for the application to run.
 
 **Key Features:**
 
@@ -62,7 +79,7 @@ AWS Fargate is a serverless compute engine for containers, eliminating the need 
 
 **Example: Running a Container in Fargate (ECS)**
 
-1. Push your Docker image to Amazon Elastic Container Registry (ECR):
+1. Push your Docker image to Amazon Elastic Container Registry (ECR)
 
 ```bash
 aws ecr create-repository --repository-name my-app
@@ -73,7 +90,7 @@ docker push <account-id>.dkr.ecr.<region>.amazonaws.com/my-app
 2. Launch the container in ECS (via the AWS Management Console or CloudFormation).
 3. Interact with your deployed service endpoint.
 
-### **2.3 Serverless Functions with AWS Lambda**
+### **2.3 Serverless Functions with AWS Lambda (FaaS)**
 
 AWS Lambda allows you to run applications or services without provisioning servers. You simply upload your code, and AWS takes care of execution and scaling based on events.
 
@@ -85,7 +102,7 @@ AWS Lambda allows you to run applications or services without provisioning serve
 
 **Use Cases:**
 
-* REST APIs with API Gateway.
+* REST APIs with API Gateway and/or ALB
 * Responding to S3 or DynamoDB events.
 * Execute periodic tasks using EventBridge or CloudWatch.
 
